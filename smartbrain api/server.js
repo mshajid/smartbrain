@@ -1,6 +1,6 @@
 const express = require('express');
 const bodyParser = require('body-parser');
-
+const bcrypt = require('bcrypt-nodejs')
 
 const app = express()
 app.use(bodyParser.json());
@@ -28,6 +28,14 @@ const database = {
             entries: 0,
             joined: new Date()
         }
+    ],
+
+    login: [
+        {
+            id: '987',
+            hash: '',
+            email: 'john@gmail.com'
+        }
     ]
 }
 
@@ -45,6 +53,9 @@ app.post('/signin', (req, res) => {
 
 app.post('/register', (req, res) => {
     const { email, name, password } = req.body;
+    bcrypt.hash(password, null, null, function(err, hash) {
+        console.log(hash);
+    });
     database.users.push({
         id: '128',
         name: name,
@@ -84,6 +95,17 @@ app.put('/image', (req, res) => {
         res.status(400).json('There is no such a user with the ID')
     }
 })
+
+
+
+// bcrypt.compare("bacon", hash, function (err, res) {
+
+// });
+
+// bcrypt.compare("veggies", hash, function(err, res) {
+
+// });
+
 
 app.listen(3000, ()=> {
     console.log('app is running on Port 3000');
